@@ -18,8 +18,8 @@ const MyFooter = () => {
             </p>
             <p>
               Phone:{" "}
-              <a href="tel:+1234567890" className="text-white">
-                +1 (234) 567-890
+              <a href="tel:+393391614273" className="text-white">
+                + 39 3391614273
               </a>
             </p>
           </Col>
