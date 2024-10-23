@@ -6,9 +6,9 @@ import { Container } from "react-bootstrap";
 import MyNavbar from "./assets/Components/MyNavbar";
 import AboutMe from "./assets/Components/AboutMe";
 import Collage from "./assets/Components/Collage";
-import Nudi from "./assets/Components/Nudi";
-import PaesaggiDelCorpoUmano from "./assets/Components/PaesaggiDelCorpoUmano";
-import PaesaggiMediterranei from "./assets/Components/PaesaggiMediterranei";
+import PaesaggoDelCorpoUmano from "./assets/Components/PaesaggoDelCorpoUmano";
+import Sculture from "./assets/Components/Sculture";
+import MyFooter from "./assets/Components/MyFooter";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -18,9 +18,9 @@ function App() {
       <MyNavbar />
       <AboutMe />
       <Collage />
-      <Nudi />
-      <PaesaggiDelCorpoUmano />
-      <PaesaggiMediterranei />
+      <PaesaggoDelCorpoUmano />
+      <Sculture />
+      <MyFooter />
     </>
   );
 }
