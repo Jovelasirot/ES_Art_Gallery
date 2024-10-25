@@ -45,7 +45,7 @@ const Sculture = () => {
 
         <Row className="align-items-center g-4">
           {(showAll ? imageUrls : imageUrls.slice(0, 3)).map((url, index) => (
-            <Col key={index} sm={showAll ? "12" : ""}>
+            <Col key={index} xs={showAll ? "6" : ""}>
               <img
                 className="d-block w-100"
                 src={url}
