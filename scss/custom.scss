@@ -1,21 +1,28 @@
-$secondary: #1E1E1E;
-$primary: #C10016;
-$info: #3f4140;
-$success: #A20300;
-$warning: #051650;
-
-.capital{
-    text-transform: uppercase;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #383737;
 }
 
-.myShadow {
-    -webkit-box-shadow: 1px 11px 15px 0px rgba(194,194,194,0.68); 
-    box-shadow: 1px 11px 15px 0px rgba(194,194,194,0.68);
+body {
+    overflow: hidden;
 }
 
-.custom-modal .modal-content {
-    border: none; 
+#image-track > .image {
+    width: 40vmin;
+    height: 56vmin;
+    object-fit: cover;
+    object-position: 50% 50%;
 }
 
+#image-track {
+    display: flex;
+    gap: 4vmin;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(0, -50%);
+}
 
 @import '../node_modules/bootstrap/scss/bootstrap.scss';

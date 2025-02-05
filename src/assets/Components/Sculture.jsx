@@ -29,7 +29,8 @@ const Sculture = () => {
   }, []);
 
   return (
-    <Container fluid className=" bg-info text-white">
+    <Container fluid className=" bg-info text-white"
+      >
       <Container className="py-4">
         <h1 className="fw-bold">Sculture</h1>
 
