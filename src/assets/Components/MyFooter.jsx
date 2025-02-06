@@ -50,6 +50,12 @@ const MyFooter = () => {
           </Col>
           <Col md={4} className="mb-3">
             <h5>© {currentYear} Elio Santarella. All rights reserved.</h5>
+            <p>
+              Website by:{" "}
+              <a href="mailto:jovelasirot@gmail.com" className="text-white">
+                jovelasirot@gmail.com
+              </a>
+            </p>
           </Col>
         </Row>
       </Container>

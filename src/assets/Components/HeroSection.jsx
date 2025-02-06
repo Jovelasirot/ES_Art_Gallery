@@ -1,12 +1,37 @@
 import React, { useState, useEffect } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom"; //
 import collageImg from "../imgs/Collage/1.png";
 import paeaggiDelCorpoImg from "../imgs/PaesaggiDelCorpo/1.png";
 import sculture from "../imgs/Sculture/6.png";
+import { Col, Container, Row } from "react-bootstrap";
 
 const HeroSection = () => {
   const [mouseDownAt, setMouseDownAt] = useState(0);
   const [prevPercentage, setPrevPercentage] = useState(0);
   const [percentage, setPercentage] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const navigate = useNavigate();
+
+  const images = [
+    {
+      src: collageImg,
+      color: "black",
+      text: "Collage",
+      link: "collage",
+    },
+    {
+      src: paeaggiDelCorpoImg,
+      color: "#A20300",
+      text: "Paesaggi Del Corpo",
+      link: "paesaggi-del-corpo",
+    },
+    {
+      src: sculture,
+      color: "#3f4140",
+      text: "Sculture",
+      link: "sculture",
+    },
+  ];
 
   const onMouseDown = (e) => {
     setMouseDownAt(e.clientX);
@@ -25,14 +50,9 @@ const HeroSection = () => {
     );
 
     setPercentage(nextPercentage);
-
-    const track = document.getElementById("image-track");
-    track.style.transform = `translate(${nextPercentage}%, -50%)`;
-
-    const images = document.getElementsByClassName("image");
-    for (const image of images) {
-      image.style.objectPosition = `${nextPercentage + 100}% 50%`;
-    }
+    updateTrack(nextPercentage);
+    updateBackgroundColor(nextPercentage);
+    updateText(nextPercentage);
   };
 
   const onMouseUp = () => {
@@ -42,15 +62,18 @@ const HeroSection = () => {
 
   const onWheel = (e) => {
     const delta = e.deltaY;
-
     const smoothness = 0.3;
     const direction = delta > 0 ? -1 : 1;
-
     const newPercentage = percentage + direction * smoothness * 10;
     const nextPercentage = Math.max(Math.min(newPercentage, 0), -100);
 
     setPercentage(nextPercentage);
+    updateTrack(nextPercentage);
+    updateBackgroundColor(nextPercentage);
+    updateText(nextPercentage);
+  };
 
+  const updateTrack = (nextPercentage) => {
     const track = document.getElementById("image-track");
     track.style.transition = "transform 0.3s ease-out";
     track.style.transform = `translate(${nextPercentage}%, -50%)`;
@@ -62,6 +85,18 @@ const HeroSection = () => {
     }
   };
 
+  const updateBackgroundColor = (nextPercentage) => {
+    const index = Math.round((-nextPercentage / 100) * (images.length - 1));
+    const newColor = images[index]?.color || "black";
+    document.documentElement.style.setProperty("--bg-color", newColor);
+  };
+
+  const updateText = (nextPercentage) => {
+    const index = Math.round((-nextPercentage / 100) * (images.length - 1));
+    const newText = images[index]?.text || "";
+    setCurrentText(newText);
+  };
+
   useEffect(() => {
     window.addEventListener("wheel", onWheel);
     return () => {
@@ -69,31 +104,40 @@ const HeroSection = () => {
     };
   }, [percentage]);
 
+  const handleImageClick = (link) => {
+    navigate(`/${link}`);
+  };
+
   return (
-    <section
-      id="image-track"
-      data-mouse-down-at={mouseDownAt}
-      data-prev-percentage={prevPercentage}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseUp}
-    >
-      <img src={collageImg} className="image" draggable="false" alt="image 1" />
-      <img
-        src={paeaggiDelCorpoImg}
-        className="image"
-        draggable="false"
-        alt="image 2"
-      />
-      <img src={sculture} className="image" draggable="false" alt="image 3" />
-      <img
-        src="https://images.unsplash.com/photo-1677688010633-138cea460828?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"
-        className="image"
-        draggable="false"
-        alt="image 4"
-      />
-    </section>
+    <Container>
+      <Row className="flex-column">
+        <Col>
+          <section
+            id="image-track"
+            data-mouse-down-at={mouseDownAt}
+            data-prev-percentage={prevPercentage}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+          >
+            {images.map((image, index) => (
+              <img
+                key={index}
+                src={image.src}
+                className="image"
+                draggable="false"
+                alt={`image ${index + 1}`}
+                onClick={() => handleImageClick(image.link)}
+              />
+            ))}
+          </section>
+        </Col>
+        <Col className="text-center current-text">
+          <div className="fs-1 fw-bold">{currentText}</div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

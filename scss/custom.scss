@@ -2,12 +2,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #383737;
+    background-color: var(--bg-color, #000000); 
+    transition: background-color 0.4s ease;
 }
 
 body {
     overflow: hidden;
 }
+
 
 #image-track > .image {
     width: 40vmin;
@@ -18,11 +20,22 @@ body {
 
 #image-track {
     display: flex;
-    gap: 4vmin;
+    gap: 5vmin;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(0, -50%);
 }
 
+.current-text {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+
+}
+
+@import url('https://fonts.cdnfonts.com/css/satoshi');
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
+
