@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const images = import.meta.glob("../imgs/PaesaggiDelCorpo/*.{jpg,png,jpeg}");
 
 const PaesaggoDelCorpoUmano = () => {
   const [imageUrls, setImageUrls] = useState([]);
-  const [showAll, setShowAll] = useState(false);
+  const [mouseDownAt, setMouseDownAt] = useState(0);
+  const [prevPercentage, setPrevPercentage] = useState(0);
+  const [percentage, setPercentage] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -28,42 +32,104 @@ const PaesaggoDelCorpoUmano = () => {
     loadImages();
   }, []);
 
+  const onMouseDown = (e) => {
+    setMouseDownAt(e.clientX);
+  };
+
+  const onMouseMove = (e) => {
+    if (mouseDownAt === 0) return;
+
+    const mouseDelta = mouseDownAt - e.clientX;
+    const maxDelta = window.innerWidth;
+    const newPercentage = -((mouseDelta / maxDelta) * 100);
+    const nextPercentageUnconstrained = prevPercentage + newPercentage;
+    const nextPercentage = Math.max(
+      Math.min(nextPercentageUnconstrained, 0),
+      -100
+    );
+
+    setPercentage(nextPercentage);
+    updateTrack(nextPercentage);
+    updateImg(nextPercentage);
+  };
+
+  const onMouseUp = () => {
+    setMouseDownAt(0);
+    setPrevPercentage(percentage);
+  };
+
+  const onWheel = (e) => {
+    const delta = e.deltaY;
+    const smoothness = 0.3;
+    const direction = delta > 0 ? -1 : 1;
+    const newPercentage = percentage + direction * smoothness * 10;
+    const nextPercentage = Math.max(Math.min(newPercentage, 0), -100);
+
+    setPercentage(nextPercentage);
+    updateTrack(nextPercentage);
+    updateImg(nextPercentage);
+  };
+
+  const updateTrack = (nextPercentage) => {
+    const track = document.getElementById("image-track");
+    track.style.transition = "transform 0.3s ease-out";
+    track.style.transform = `translate(${nextPercentage}%, -50%)`;
+
+    const images = document.getElementsByClassName("image");
+    for (const image of images) {
+      image.style.transition = "object-position 0.3s ease-out";
+      image.style.objectPosition = `${nextPercentage + 100}% 50%`;
+    }
+  };
+
+  const updateImg = (nextPercentage) => {
+    const index = Math.round((-nextPercentage / 100) * (imageUrls.length - 1));
+    setCurrentIndex(index);
+  };
+
+  useEffect(() => {
+    window.addEventListener("wheel", onWheel);
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+    };
+  }, [percentage]);
+
   return (
-    <Container fluid className=" bg-success text-white">
-      <Container className="py-4">
-        <h1 className="fw-bold">Paesaggi Del Corpo Umano</h1>
-
-        {showAll && (
-          <Button
-            variant="secondary"
-            className="position-fixed top-0 end-0 m-3"
-            onClick={() => setShowAll(!showAll)}
-          >
-            {showAll ? "Mostra meno" : "Mostra tutto"}
-          </Button>
-        )}
-
-        <Row className="align-items-center g-4">
-          {(showAll ? imageUrls : imageUrls.slice(0, 3)).map((url, index) => (
-            <Col key={index} sm={showAll ? "12" : ""}>
-              <img
-                className="d-block w-100"
-                src={url}
-                alt={`Paesaggo DelCorpo Umano image ${index + 1}`}
-              />
-            </Col>
-          ))}
-        </Row>
-        {imageUrls.length > 3 && (
-          <Row className="mt-4">
-            <Col className="text-center">
-              <Button variant="secondary" onClick={() => setShowAll(!showAll)}>
-                {showAll ? "Mostra meno" : "Mostra tutto"}
-              </Button>
-            </Col>
-          </Row>
-        )}
-      </Container>
+    <Container className="text-white">
+      <Row>
+        <Col xs={12} className="mb-4 text-white" as={Link} to="/">
+          <i className="bi bi-arrow-left fs-2"></i>
+        </Col>
+        <Col className="d-flex justify-content-center">
+          <span className="fs-1 fw-bold text-center">
+            Paessaggi del corpo umano
+          </span>
+        </Col>
+      </Row>
+      <section
+        id="image-track"
+        data-mouse-down-at={mouseDownAt}
+        data-prev-percentage={prevPercentage}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseUp}
+      >
+        {imageUrls.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            className="image"
+            draggable="false"
+            alt={`Paessaggio del corpo numero ${index + 1}`}
+          />
+        ))}
+      </section>
+      <Col className="text-center current-text">
+        <div className="fs-1 fw-bold">
+          {currentIndex + 1} - {imageUrls.length}
+        </div>
+      </Col>
     </Container>
   );
 };

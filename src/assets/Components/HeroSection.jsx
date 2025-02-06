@@ -22,7 +22,7 @@ const HeroSection = () => {
     {
       src: paeaggiDelCorpoImg,
       color: "#A20300",
-      text: "Paesaggi Del Corpo",
+      text: "Paesaggi Del Corpo Umano",
       link: "paesaggi-del-corpo",
     },
     {
@@ -104,8 +104,9 @@ const HeroSection = () => {
     };
   }, [percentage]);
 
-  const handleImageClick = (link) => {
+  const handleImageClick = (link, color) => {
     navigate(`/${link}`);
+    document.documentElement.style.setProperty("--bg-color", color);
   };
 
   return (
@@ -128,7 +129,7 @@ const HeroSection = () => {
                 className="image"
                 draggable="false"
                 alt={`image ${index + 1}`}
-                onClick={() => handleImageClick(image.link)}
+                onClick={() => handleImageClick(image.link, image.color)}
               />
             ))}
           </section>
