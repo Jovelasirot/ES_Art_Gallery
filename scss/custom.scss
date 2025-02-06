@@ -3,11 +3,12 @@
     padding: 0;
     box-sizing: border-box;
     background-color: var(--bg-color, #000000); 
-    transition: background-color 0.4s ease;
+    transition: background-color 0.5s ease; 
 }
 
 body {
     overflow: hidden;
+    background-color: var(--bg-color, #000000);
 }
 
 

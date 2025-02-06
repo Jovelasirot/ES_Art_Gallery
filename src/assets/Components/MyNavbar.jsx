@@ -6,13 +6,13 @@ const MyNavbar = () => {
     <Navbar variant="dark" className="mt-4">
       <Container className="d-flex justify-content-center align-items-center">
         <Col className="text-end border-end fw-bold">
-          <Navbar.Brand as={Link} to="/" className="pb-0 fs-2">
+          <Navbar.Brand as={Link} to="/" className="fs-2">
             Elio Santarella
           </Navbar.Brand>
         </Col>
         <Col>
           <Nav>
-            <Nav.Link as={Link} to="/about-me" className="pb-0 fs-2">
+            <Nav.Link as={Link} to="/about-me" className="fs-2">
               Info
             </Nav.Link>
           </Nav>

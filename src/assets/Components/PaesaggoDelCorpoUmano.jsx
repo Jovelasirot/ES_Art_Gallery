@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Modal, ModalBody, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const images = import.meta.glob("../imgs/PaesaggiDelCorpo/*.{jpg,png,jpeg}");
@@ -10,6 +10,8 @@ const PaesaggoDelCorpoUmano = () => {
   const [prevPercentage, setPrevPercentage] = useState(0);
   const [percentage, setPercentage] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
     const loadImages = async () => {
@@ -94,6 +96,16 @@ const PaesaggoDelCorpoUmano = () => {
     };
   }, [percentage]);
 
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedImage("");
+  };
+
   return (
     <Container className="text-white">
       <Row>
@@ -122,6 +134,7 @@ const PaesaggoDelCorpoUmano = () => {
             className="image"
             draggable="false"
             alt={`Paessaggio del corpo numero ${index + 1}`}
+            onClick={() => handleImageClick(image)}
           />
         ))}
       </section>
@@ -130,6 +143,28 @@ const PaesaggoDelCorpoUmano = () => {
           {currentIndex + 1} - {imageUrls.length}
         </div>
       </Col>
+
+      <Modal
+        show={showModal}
+        onHide={handleCloseModal}
+        size="lg"
+        centered
+        className="bg-none"
+      >
+        <Modal.Body>
+          <img
+            src={selectedImage}
+            alt="Full Image"
+            className="d-block w-100"
+            style={{ objectFit: "contain" }}
+          />
+        </Modal.Body>
+        <Modal.Footer className="bg-none">
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

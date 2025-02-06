@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Modal, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const images = import.meta.glob("../imgs/Sculture/*.{jpg,png,jpeg}");
@@ -10,6 +10,8 @@ const Sculture = () => {
   const [prevPercentage, setPrevPercentage] = useState(0);
   const [percentage, setPercentage] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
     const loadImages = async () => {
@@ -94,6 +96,16 @@ const Sculture = () => {
     };
   }, [percentage]);
 
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedImage("");
+  };
+
   return (
     <Container className="text-white">
       <Row>
@@ -120,6 +132,7 @@ const Sculture = () => {
             className="image"
             draggable="false"
             alt={`Scultura numero ${index + 1}`}
+            onClick={() => handleImageClick(image)}
           />
         ))}
       </section>
@@ -128,6 +141,22 @@ const Sculture = () => {
           {currentIndex + 1} - {imageUrls.length}
         </div>
       </Col>
+
+      <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
+        <Modal.Body>
+          <img
+            src={selectedImage}
+            alt="Full Image"
+            className="d-block w-100"
+            style={{ objectFit: "contain" }}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

@@ -86,7 +86,7 @@ const HeroSection = () => {
   };
 
   const updateBackgroundColor = (nextPercentage) => {
-    const index = Math.round((-nextPercentage / 100) * (images.length - 1));
+    const index = Math.round((-nextPercentage / 95) * (images.length - 1));
     const newColor = images[index]?.color || "black";
     document.documentElement.style.setProperty("--bg-color", newColor);
   };
