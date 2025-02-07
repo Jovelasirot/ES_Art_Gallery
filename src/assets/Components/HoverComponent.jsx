@@ -1,9 +1,10 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState, useRef } from "react";
 
-const HoverComponent = () => {
+const HoverComponent = ({ currentIndex }) => {
   const [styles, setStyles] = useState([]);
   const speed = 0.1;
-  const numCursors = 7;
+  const numCursors = 5;
   const ballsRef = useRef([]);
   const aim = useRef({ x: 0, y: 0 });
 

@@ -7,11 +7,13 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Collage from "./assets/Components/Collage";
 import Sculture from "./assets/Components/Sculture";
 import PaesaggoDelCorpoUmano from "./assets/Components/PaesaggoDelCorpoUmano";
+import HoverComponent from "./assets/Components/HoverComponent";
 
 function App() {
   return (
     <Router>
       <MyNavbar />
+      <HoverComponent />
       <Routes>
         <Route path="/" element={<HeroSection />} />
         <Route path="/about-me" element={<AboutMe />} />

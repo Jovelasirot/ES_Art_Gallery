@@ -13,13 +13,13 @@ const HeroSection = () => {
   const images = [
     {
       src: collageImg,
-      color: "black",
+      color: "#1E1E1E",
       text: "Collage",
       link: "collage",
     },
     {
       src: paeaggiDelCorpoImg,
-      color: "#A20300",
+      color: "#641820",
       text: "Paesaggi Del Corpo Umano",
       link: "paesaggi-del-corpo",
     },

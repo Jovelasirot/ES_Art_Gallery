@@ -71,7 +71,6 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex }) => {
 
   return (
     <>
-      <HoverComponent />
       <section
         id="image-track"
         data-mouse-down-at={mouseDownAt}

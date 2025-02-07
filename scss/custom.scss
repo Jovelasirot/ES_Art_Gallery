@@ -41,14 +41,16 @@ body {
     top: 0;
     left: 0;
     pointer-events: none;
+   
   }
   
   .ball {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #58a8d6;
+    width: 30px;
+    height: 30px;
+    background-color:  rgba(202, 239, 197, 0.2);
     border-radius: 50%;
+    backdrop-filter: blur(12px);
     transform: translate(-50%, -50%);
     z-index: 10;
   }
