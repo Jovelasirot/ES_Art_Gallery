@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Container, Modal, ModalBody, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ImageTrack from "./ImageTrack";
+import MyModal from "./MyModal";
 
 const images = import.meta.glob("../imgs/PaesaggiDelCorpo/*.{jpg,png,jpeg}");
 
@@ -37,6 +38,14 @@ const PaesaggoDelCorpoUmano = () => {
     setShowModal(true);
   };
 
+  const handleChangeImg = (image) => {
+    if (image !== undefined) {
+      setSelectedImage(image);
+    } else {
+      setShowModal(false);
+    }
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedImage("");
@@ -64,27 +73,13 @@ const PaesaggoDelCorpoUmano = () => {
           {currentIndex + 1} - {imageUrls.length}
         </div>
       </Col>
-      <Modal
-        show={showModal}
-        onHide={handleCloseModal}
-        size="lg"
-        centered
-        className="bg-none"
-      >
-        <Modal.Body>
-          <img
-            src={selectedImage}
-            alt="Full Image"
-            className="d-block w-100"
-            style={{ objectFit: "contain" }}
-          />
-        </Modal.Body>
-        <Modal.Footer className="bg-none">
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <MyModal
+        selectedImage={selectedImage}
+        imageUrls={imageUrls}
+        showModal={showModal}
+        handleChangeImg={handleChangeImg}
+        handleCloseModal={handleCloseModal}
+      />
     </Container>
   );
 };

@@ -86,7 +86,7 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex }) => {
             src={image}
             className="image"
             draggable="false"
-            alt={`Paessaggio del corpo numero ${index + 1}`}
+            alt={`Immagine numero ${index + 1}`}
             onDoubleClick={() => onImageClick(image)}
           />
         ))}

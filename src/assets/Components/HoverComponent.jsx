@@ -15,7 +15,7 @@ const HoverComponent = ({ currentIndex }) => {
       const newStyles = [];
 
       positions.current.forEach((pos, index) => {
-        const ballSpeed = speed - index * 0.02;
+        const ballSpeed = speed - index * 0.0145;
 
         pos.x += (aim.current.x - pos.x) * ballSpeed;
         pos.y += (aim.current.y - pos.y) * ballSpeed;
