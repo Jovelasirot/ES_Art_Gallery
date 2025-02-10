@@ -1,37 +1,75 @@
 /* eslint-disable react/prop-types */
-import { Modal } from "react-bootstrap";
+import { useEffect } from "react";
+import { Col, Modal, Row } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { Button, Container } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 
 const MyModal = ({
   selectedImage,
   imageUrls,
   showModal,
-  handleChangeImg,
   handleCloseModal,
+  handleChangeImg,
 }) => {
+  const location = useLocation();
+  const getCategoryName = () => {
+    if (location.pathname.includes("paesaggi-del-corpo"))
+      return "Paessaggi del Corpo Umano";
+    if (location.pathname.includes("Sculture")) return "Sculture";
+    return "Collage";
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const currentIndex = imageUrls.indexOf(selectedImage);
+      if (event.key === "ArrowRight" && currentIndex < imageUrls.length - 1) {
+        handleChangeImg(imageUrls[currentIndex + 1]);
+      } else if (event.key === "ArrowLeft" && currentIndex > 0) {
+        handleChangeImg(imageUrls[currentIndex - 1]);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImage, imageUrls, handleChangeImg]);
+
+  const handleScroll = (event) => {
+    const currentIndex = imageUrls.indexOf(selectedImage);
+    if (event.deltaY > 0 && currentIndex < imageUrls.length - 1) {
+      handleChangeImg(imageUrls[currentIndex + 1]);
+    } else if (event.deltaY < 0 && currentIndex > 0) {
+      handleChangeImg(imageUrls[currentIndex - 1]);
+    }
+  };
+
   return (
     <Modal
       show={showModal}
       onHide={handleCloseModal}
       fullscreen
       centered
-      style={{
-        background: "rgba(255, 255, 255, 0.1)",
-        backdropFilter: "blur(10px)",
-      }}
+      onWheel={handleScroll}
     >
       <Modal.Body className="d-flex flex-column align-items-center justify-content-center">
-        <Container className="d-flex mb-3">
-          <i
-            className="bi bi-arrow-left fs-2 text-white"
-            onClick={handleCloseModal}
-          ></i>
+        <Container className="text-white mb-2">
+          <Row className="align-itmes-center">
+            <Col>
+              <i
+                className="bi bi-arrow-left  fs-2"
+                onClick={handleCloseModal}
+              ></i>
+            </Col>
+            <Col className="text-center fs-4 fw-bold">
+              {getCategoryName()} {imageUrls.indexOf(selectedImage) + 1}
+            </Col>
+            <Col className="text-end fs-4">ELio Santarella</Col>
+          </Row>
         </Container>
         <motion.img
           src={selectedImage}
           alt="Selected"
-          className="d-block h-75"
+          className=" h-75 w-100"
           style={{ objectFit: "contain" }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -42,13 +80,14 @@ const MyModal = ({
             <motion.img
               key={index}
               src={image}
-              alt={`Immagine ${index}`}
+              alt={`Thumbnail ${index}`}
               className="m-2 "
               style={{
                 width: "80px",
                 height: "80px",
                 cursor: "pointer",
                 objectFit: "cover",
+                opacity: image === selectedImage ? 1 : 0.5,
               }}
               whileHover={{ scale: 1.1 }}
               onClick={() => handleChangeImg(image)}
