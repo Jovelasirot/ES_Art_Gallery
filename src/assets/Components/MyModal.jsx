@@ -14,12 +14,16 @@ const MyModal = ({
 }) => {
   const location = useLocation();
   const getCategoryName = () => {
-    if (location.pathname.includes("paesaggi-del-corpo"))
-      return "Paessaggi del Corpo Umano";
-    if (location.pathname.includes("Sculture")) return "Sculture";
-    return "Collage";
-  };
+    if (!selectedImage) return "";
 
+    if (selectedImage.includes("PaesaggiDelCorpo"))
+      return "Paesaggi del corpo umano";
+    if (selectedImage.includes("Sculture")) return "Sculture";
+    if (selectedImage.includes("Nudi")) return "Nudi";
+    if (selectedImage.includes("Collage")) return "Collage";
+
+    return "Gallery";
+  };
   useEffect(() => {
     const handleKeyDown = (event) => {
       const currentIndex = imageUrls.indexOf(selectedImage);

@@ -7,9 +7,14 @@
 }
 
 body {
-    overflow: hidden;
     background-color: var(--bg-color, #000000);
 }
+
+@media (min-width: 1024px) {
+    body {
+      overflow: hidden; 
+    }
+  }
 
 
 #image-track > .image {

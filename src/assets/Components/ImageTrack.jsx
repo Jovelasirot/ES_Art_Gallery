@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
-import HoverComponent from "./HoverComponent";
 import { Col, Row } from "react-bootstrap";
 
 const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
@@ -9,8 +8,19 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
   const [percentage, setPercentage] = useState(0);
   const [isScreenXl, setIsScreenXl] = useState(window.innerWidth > 1024);
 
+  const updateScreenSize = () => {
+    setIsScreenXl(window.innerWidth > 1024);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateScreenSize);
+    return () => {
+      window.removeEventListener("resize", updateScreenSize);
+    };
+  }, []);
+
   const onMouseMove = (e) => {
-    if (mouseDownAt === 0) return;
+    if (mouseDownAt === 0 || !isScreenXl) return;
 
     const mouseDelta = mouseDownAt - e.clientX;
     const maxDelta = window.innerWidth;
@@ -31,7 +41,13 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
     setPrevPercentage(percentage);
   };
 
+  const onMouseDown = (e) => {
+    if (isScreenXl) setMouseDownAt(e.clientX);
+  };
+
   const onWheel = (e) => {
+    if (!isScreenXl) return;
+
     const delta = e.deltaY;
     const smoothness = 0.3;
     const direction = delta > 0 ? -1 : 1;
@@ -60,16 +76,16 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
     setCurrentIndex(index);
   };
 
-  const onMouseDown = (e) => {
-    setMouseDownAt(e.clientX);
-  };
-
   useEffect(() => {
-    window.addEventListener("wheel", onWheel);
+    if (isScreenXl) {
+      window.addEventListener("wheel", onWheel);
+    } else {
+      window.removeEventListener("wheel", onWheel);
+    }
     return () => {
       window.removeEventListener("wheel", onWheel);
     };
-  }, [percentage]);
+  }, [isScreenXl, percentage]);
 
   return (
     <>
@@ -98,12 +114,12 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
         <Row className="flex-column gy-3">
           {imageUrls.map((image, index) => (
             <Col key={index}>
-              <div className="text-center fw-bold">{images[index].text}</div>
+              <div className="text-center fw-bold">{image.src}</div>
               <img
                 id="image-track-xs"
                 src={image}
                 className="image"
-                draggable="false"
+                draggable="true"
                 alt={`Immagine numero ${index + 1}`}
                 onDoubleClick={() => onImageClick(image)}
               />
