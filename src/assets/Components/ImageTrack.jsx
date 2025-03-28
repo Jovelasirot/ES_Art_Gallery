@@ -8,6 +8,22 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
   const [percentage, setPercentage] = useState(0);
   const [isScreenXl, setIsScreenXl] = useState(window.innerWidth > 1024);
 
+  const folderNameToText = {
+    PaesaggiDelCorpo: "Paesaggi del corpo umano",
+    Nudi: "Nudi",
+    Sculture: "Sculture",
+    Collage: "Collage",
+  };
+
+  const extractFolderName = (imageUrl) => {
+    const pathParts = imageUrl.split("/");
+    return pathParts[pathParts.length - 2];
+  };
+
+  const getDisplayText = (folderName) => {
+    return folderNameToText[folderName] || folderName;
+  };
+
   const updateScreenSize = () => {
     setIsScreenXl(window.innerWidth > 1024);
   };
@@ -112,19 +128,24 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
         </section>
       ) : (
         <Row className="flex-column gy-3">
-          {imageUrls.map((image, index) => (
-            <Col key={index}>
-              <div className="text-center fw-bold">{image.src}</div>
-              <img
-                id="image-track-xs"
-                src={image}
-                className="image"
-                draggable="true"
-                alt={`Immagine numero ${index + 1}`}
-                onDoubleClick={() => onImageClick(image)}
-              />
-            </Col>
-          ))}
+          {imageUrls.map((image, index) => {
+            const folderName = extractFolderName(image);
+            const displayText = getDisplayText(folderName);
+
+            return (
+              <Col key={index} className="mt-5 ">
+                <div className="text-center fw-bold fs-4">{displayText}</div>
+                <img
+                  id="image-track-xs"
+                  src={image}
+                  className="image"
+                  draggable="true"
+                  alt={`Immagine numero ${index + 1}`}
+                  onClick={() => onImageClick(image)}
+                />
+              </Col>
+            );
+          })}
         </Row>
       )}
     </>
