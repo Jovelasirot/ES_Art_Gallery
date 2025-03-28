@@ -8,12 +8,14 @@ import Collage from "./assets/Components/Collage";
 import Sculture from "./assets/Components/Sculture";
 import PaesaggoDelCorpoUmano from "./assets/Components/PaesaggoDelCorpoUmano";
 import HoverComponent from "./assets/Components/HoverComponent";
+import { useState } from "react";
 
 function App() {
+  const [isScreenXl, setIsScreenXl] = useState(window.innerWidth > 1024);
   return (
     <Router>
       <MyNavbar />
-      <HoverComponent />
+      {isScreenXl ? <HoverComponent /> : null}
       <Routes>
         <Route path="/" element={<HeroSection />} />
         <Route path="/about-me" element={<AboutMe />} />
