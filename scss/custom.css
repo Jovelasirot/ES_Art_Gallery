@@ -31,6 +31,25 @@ body {
   transform: translate(0, -50%);
 }
 
+#image-track-xs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+}
+
+#image-track-xs > .image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .current-text {
   position: absolute;
   bottom: 100px;
