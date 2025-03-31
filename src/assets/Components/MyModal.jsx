@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useRef, useState } from "react";
-import { Col, Modal, Row, Container } from "react-bootstrap";
+import { useEffect, useState, useRef } from "react";
+import { Col, Modal, Row } from "react-bootstrap";
 import { motion } from "framer-motion";
+import { Container } from "react-bootstrap";
 
 const MyModal = ({
   selectedImage,
@@ -10,17 +11,18 @@ const MyModal = ({
   handleCloseModal,
   handleChangeImg,
 }) => {
+  const [isXLScreen, setIsXLScreen] = useState(false);
   const thumbnailRef = useRef(null);
-  const [isTouching, setIsTouching] = useState(false);
-  const [startX, setStartX] = useState(0);
 
   const getCategoryName = () => {
     if (!selectedImage) return "";
+
     if (selectedImage.includes("PaesaggiDelCorpo"))
       return "Paesaggi del corpo umano";
     if (selectedImage.includes("Sculture")) return "Sculture";
     if (selectedImage.includes("Nudi")) return "Nudi";
     if (selectedImage.includes("Collage")) return "Collage";
+
     return "Gallery";
   };
 
@@ -33,6 +35,7 @@ const MyModal = ({
         handleChangeImg(imageUrls[currentIndex - 1]);
       }
     };
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedImage, imageUrls, handleChangeImg]);
@@ -46,35 +49,43 @@ const MyModal = ({
     }
   };
 
-  const handleTouchStart = (event) => {
-    setIsTouching(true);
-    setStartX(event.touches[0].clientX);
-  };
-
-  const handleTouchMove = (event) => {
-    if (!isTouching) return;
-
-    const currentX = event.touches[0].clientX;
-    const diffX = startX - currentX;
-
-    if (Math.abs(diffX) > 5) {
-      thumbnailRef.current.scrollLeft += diffX;
-      setStartX(currentX);
+  const handlePrev = () => {
+    const currentIndex = imageUrls.indexOf(selectedImage);
+    if (currentIndex > 0) {
+      handleChangeImg(imageUrls[currentIndex - 1]);
     }
   };
 
-  const handleTouchEnd = () => {
-    setIsTouching(false);
+  const handleNext = () => {
+    const currentIndex = imageUrls.indexOf(selectedImage);
+    if (currentIndex < imageUrls.length - 1) {
+      handleChangeImg(imageUrls[currentIndex + 1]);
+    }
   };
 
   useEffect(() => {
     if (thumbnailRef.current) {
       const currentIndex = imageUrls.indexOf(selectedImage);
-      const thumbnailWidth = 90; // Thumbnail width + margin
+      const thumbnailWidth = 90;
       thumbnailRef.current.scrollLeft =
-        currentIndex * thumbnailWidth - thumbnailWidth * 2;
+        currentIndex * thumbnailWidth - thumbnailWidth * 1;
     }
-  }, [selectedImage]);
+  }, [selectedImage, imageUrls]);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      if (window.innerWidth >= 1200) {
+        setIsXLScreen(true);
+      } else {
+        setIsXLScreen(false);
+      }
+    };
+
+    checkScreenSize();
+
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   return (
     <Modal
@@ -99,6 +110,19 @@ const MyModal = ({
             <Col className="text-end fs-4">Elio Santarella</Col>
           </Row>
         </Container>
+
+        {!isXLScreen && (
+          <>
+            <button className="carousel-btn-left" onClick={handlePrev}>
+              &#60;
+            </button>
+
+            <button className="carousel-btn-right" onClick={handleNext}>
+              &#62;
+            </button>
+          </>
+        )}
+
         <motion.img
           src={selectedImage}
           alt="Selected"
@@ -108,18 +132,11 @@ const MyModal = ({
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
         />
+
         <div
           ref={thumbnailRef}
           className="d-flex overflow-auto mt-3"
-          style={{
-            maxWidth: "90%",
-            scrollBehavior: "smooth",
-            whiteSpace: "nowrap",
-            paddingBottom: "10px",
-          }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          style={{ maxWidth: "90%" }}
         >
           {imageUrls.map((image, index) => (
             <motion.img
@@ -133,6 +150,8 @@ const MyModal = ({
                 cursor: "pointer",
                 objectFit: "cover",
                 opacity: image === selectedImage ? 1 : 0.5,
+                overflowY: "none",
+                overflowX: "none",
               }}
               whileHover={{ scale: 1.1 }}
               onClick={() => handleChangeImg(image)}
