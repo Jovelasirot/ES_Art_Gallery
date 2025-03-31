@@ -2,11 +2,12 @@ import { Col, Container, Row, Button } from "react-bootstrap";
 import elioPic from "../imgs/ElioPic.jpg";
 import { useEffect, useState } from "react";
 import MyFooter from "./MyFooter";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AboutMe = () => {
   const [isXLScreen, setIsXLScreen] = useState(false);
   const [showFullText, setShowFullText] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -85,6 +86,14 @@ const AboutMe = () => {
                 </Button>
               )}
             </Col>
+            <Row className="my-5">
+              <Col
+                className="text-center my-3"
+                onClick={() => navigate("/galleria")}
+              >
+                <span className="cstmBtn">Vai alla galleria</span>
+              </Col>
+            </Row>
           </Row>
         </Container>
       </Row>

@@ -8,20 +8,11 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
   const [percentage, setPercentage] = useState(0);
   const [isScreenXl, setIsScreenXl] = useState(window.innerWidth > 1024);
 
-  const folderNameToText = {
-    PaesaggiDelCorpo: "Paesaggi del corpo umano",
-    Nudi: "Nudi",
-    Sculture: "Sculture",
-    Collage: "Collage",
-  };
+  const categoryText = ["Paesaggi del corpo umano", "Sculture", "Collage"];
 
   const extractFolderName = (imageUrl) => {
     const pathParts = imageUrl.split("/");
     return pathParts[pathParts.length - 2];
-  };
-
-  const getDisplayText = (folderName) => {
-    return folderNameToText[folderName] || folderName;
   };
 
   const updateScreenSize = () => {
@@ -101,6 +92,7 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
     return () => {
       window.removeEventListener("wheel", onWheel);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScreenXl, percentage]);
 
   return (
@@ -129,12 +121,11 @@ const ImageTrack = ({ imageUrls, onImageClick, setCurrentIndex, images }) => {
       ) : (
         <Row className="flex-column gy-3">
           {imageUrls.map((image, index) => {
-            const folderName = extractFolderName(image);
-            const displayText = getDisplayText(folderName);
-
             return (
               <Col key={index} className="mt-5 ">
-                <div className="text-center fw-bold fs-4">{displayText}</div>
+                <div className="text-center fw-bold fs-4">
+                  {categoryText[index]}
+                </div>
                 <img
                   id="image-track-xs"
                   src={image}

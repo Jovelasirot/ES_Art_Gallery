@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
-import { Col, Modal, Row } from "react-bootstrap";
+import { useEffect, useRef, useState } from "react";
+import { Col, Modal, Row, Container } from "react-bootstrap";
 import { motion } from "framer-motion";
-import { Button, Container } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
 
 const MyModal = ({
   selectedImage,
@@ -12,18 +10,20 @@ const MyModal = ({
   handleCloseModal,
   handleChangeImg,
 }) => {
-  const location = useLocation();
+  const thumbnailRef = useRef(null);
+  const [isTouching, setIsTouching] = useState(false);
+  const [startX, setStartX] = useState(0);
+
   const getCategoryName = () => {
     if (!selectedImage) return "";
-
     if (selectedImage.includes("PaesaggiDelCorpo"))
       return "Paesaggi del corpo umano";
     if (selectedImage.includes("Sculture")) return "Sculture";
     if (selectedImage.includes("Nudi")) return "Nudi";
     if (selectedImage.includes("Collage")) return "Collage";
-
     return "Gallery";
   };
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       const currentIndex = imageUrls.indexOf(selectedImage);
@@ -33,7 +33,6 @@ const MyModal = ({
         handleChangeImg(imageUrls[currentIndex - 1]);
       }
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedImage, imageUrls, handleChangeImg]);
@@ -47,6 +46,36 @@ const MyModal = ({
     }
   };
 
+  const handleTouchStart = (event) => {
+    setIsTouching(true);
+    setStartX(event.touches[0].clientX);
+  };
+
+  const handleTouchMove = (event) => {
+    if (!isTouching) return;
+
+    const currentX = event.touches[0].clientX;
+    const diffX = startX - currentX;
+
+    if (Math.abs(diffX) > 5) {
+      thumbnailRef.current.scrollLeft += diffX;
+      setStartX(currentX);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsTouching(false);
+  };
+
+  useEffect(() => {
+    if (thumbnailRef.current) {
+      const currentIndex = imageUrls.indexOf(selectedImage);
+      const thumbnailWidth = 90; // Thumbnail width + margin
+      thumbnailRef.current.scrollLeft =
+        currentIndex * thumbnailWidth - thumbnailWidth * 2;
+    }
+  }, [selectedImage]);
+
   return (
     <Modal
       show={showModal}
@@ -57,35 +86,47 @@ const MyModal = ({
     >
       <Modal.Body className="d-flex flex-column align-items-center justify-content-center">
         <Container className="text-white mb-2">
-          <Row className="align-itmes-center">
+          <Row className="align-items-center">
             <Col>
               <i
-                className="bi bi-arrow-left  fs-2"
+                className="bi bi-arrow-left fs-2"
                 onClick={handleCloseModal}
               ></i>
             </Col>
             <Col className="text-center fs-4 fw-bold">
               {getCategoryName()} {imageUrls.indexOf(selectedImage) + 1}
             </Col>
-            <Col className="text-end fs-4">ELio Santarella</Col>
+            <Col className="text-end fs-4">Elio Santarella</Col>
           </Row>
         </Container>
         <motion.img
           src={selectedImage}
           alt="Selected"
-          className=" h-75 w-100"
+          className="h-75 w-100"
           style={{ objectFit: "contain" }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
         />
-        <div className="d-flex overflow-auto mt-3" style={{ maxWidth: "90%" }}>
+        <div
+          ref={thumbnailRef}
+          className="d-flex overflow-auto mt-3"
+          style={{
+            maxWidth: "90%",
+            scrollBehavior: "smooth",
+            whiteSpace: "nowrap",
+            paddingBottom: "10px",
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {imageUrls.map((image, index) => (
             <motion.img
               key={index}
               src={image}
               alt={`Thumbnail ${index}`}
-              className="m-2 "
+              className="m-2"
               style={{
                 width: "80px",
                 height: "80px",

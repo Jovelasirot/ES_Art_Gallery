@@ -30,7 +30,7 @@ const HeroSection = () => {
       text: "Paesaggi del corpo umano",
       category: "paesaggi-del-corpo",
     },
-    { src: nudiImg, color: "#112438", text: "Nudi", category: "Nudi" },
+    // { src: nudiImg, color: "#112438", text: "Nudi", category: "Nudi" },
     {
       src: scultureImg,
       color: "#3f4140",

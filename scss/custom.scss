@@ -78,6 +78,19 @@ body {
     z-index: 10;
   }
 
+.cstmBtn{
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+
+  &:hover{
+    background: rgba(255, 255, 255, 1);
+    color: #000000;
+    transition: 0.4s ease-out;
+  }
+}
+
 @import url('https://fonts.cdnfonts.com/css/satoshi');
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 

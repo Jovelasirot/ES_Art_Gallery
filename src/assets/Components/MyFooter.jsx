@@ -5,7 +5,7 @@ const MyFooter = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Container className="text-center py-4 ">
+    <Container className="text-center py-4 border-top">
       <Row className="align-items-center">
         <Col md={4} className="mb-3">
           <h5>Contattami</h5>
