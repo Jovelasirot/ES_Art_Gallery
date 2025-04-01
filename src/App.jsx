@@ -9,6 +9,7 @@ import Sculture from "./assets/Components/ExtraComponent/Sculture";
 import PaesaggoDelCorpoUmano from "./assets/Components/ExtraComponent/PaesaggoDelCorpoUmano";
 import HoverComponent from "./assets/Components/HoverComponent";
 import { useState } from "react";
+import NotFound from "./assets/Components/ExtraComponent/NotFound";
 
 function App() {
   const [isScreenXl, setIsScreenXl] = useState(window.innerWidth > 1024);
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<AboutMe />} />
         <Route path="/galleria" element={<HeroSection />} />
+        <Route path="*" element={<NotFound />} />
         {/* <Route path="/collage" element={<Collage />} />
         <Route path="/paesaggi-del-corpo" element={<PaesaggoDelCorpoUmano />} />
         <Route path="/sculture" element={<Sculture />} /> */}

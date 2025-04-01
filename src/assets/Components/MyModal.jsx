@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { Col, Modal, Row } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const MyModal = ({
   selectedImage,
@@ -13,15 +14,32 @@ const MyModal = ({
 }) => {
   const [isXLScreen, setIsXLScreen] = useState(false);
   const thumbnailRef = useRef(null);
+  const navigate = useNavigate();
+
+  const categoryMapping = {
+    PaesaggiDelCorpo: "Paesaggi del corpo umano",
+    Sculture: "Sculture",
+    Nudi: "Nudi",
+    Collage: "Collage",
+  };
+
+  useEffect(() => {
+    if (
+      showModal &&
+      performance.getEntriesByType("navigation")[0]?.type === "reload"
+    ) {
+      navigate("/galleria");
+    }
+  }, [showModal, navigate]);
 
   const getCategoryName = () => {
     if (!selectedImage) return "";
 
-    if (selectedImage.includes("PaesaggiDelCorpo"))
-      return "Paesaggi del corpo umano";
-    if (selectedImage.includes("Sculture")) return "Sculture";
-    if (selectedImage.includes("Nudi")) return "Nudi";
-    if (selectedImage.includes("Collage")) return "Collage";
+    for (const key in categoryMapping) {
+      if (selectedImage.includes(key)) {
+        return categoryMapping[key];
+      }
+    }
 
     return "Gallery";
   };

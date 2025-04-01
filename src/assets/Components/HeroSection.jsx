@@ -3,10 +3,9 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ImageTrack from "./ImageTrack";
 import MyModal from "./MyModal";
-import collageImg from "../imgs/Collage/1.png";
-import paesaggiDelCorpoImg from "../imgs/PaesaggiDelCorpo/1.png";
+import collageImg from "../imgs/Collage/4.png";
+import paesaggiDelCorpoImg from "../imgs/PaesaggiDelCorpo/3.png";
 import scultureImg from "../imgs/Sculture/6.png";
-import nudiImg from "../imgs/Nudi/1.svg";
 
 const categoryImages = {
   "paesaggi-del-corpo": import.meta.glob(
@@ -30,7 +29,6 @@ const HeroSection = () => {
       text: "Paesaggi del corpo umano",
       category: "paesaggi-del-corpo",
     },
-    // { src: nudiImg, color: "#112438", text: "Nudi", category: "Nudi" },
     {
       src: scultureImg,
       color: "#3f4140",
