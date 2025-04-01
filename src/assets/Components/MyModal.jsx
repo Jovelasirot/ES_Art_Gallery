@@ -33,10 +33,11 @@ const MyModal = ({
   }, [showModal, navigate]);
 
   const getCategoryName = () => {
-    if (!selectedImage) return "";
+    if (!selectedImage) return "Gallery";
 
+    const normalizedImage = selectedImage.toLowerCase();
     for (const key in categoryMapping) {
-      if (selectedImage.includes(key)) {
+      if (normalizedImage.includes(key.toLowerCase())) {
         return categoryMapping[key];
       }
     }
