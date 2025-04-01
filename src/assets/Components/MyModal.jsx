@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { Col, Modal, Row } from "react-bootstrap";
 import { motion } from "framer-motion";
 import { Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const MyModal = ({
   selectedImage,
@@ -15,12 +15,12 @@ const MyModal = ({
   const [isXLScreen, setIsXLScreen] = useState(false);
   const thumbnailRef = useRef(null);
   const navigate = useNavigate();
+  const { category, imageName } = useParams();
 
-  const categoryMapping = {
-    PaesaggiDelCorpo: "Paesaggi del corpo umano",
-    Sculture: "Sculture",
-    Nudi: "Nudi",
-    Collage: "Collage",
+  const colorMapping = {
+    "#641820": "Paesaggi del corpo umano",
+    "#3f4140": "Sculture",
+    "#1E1E1E": "Collage",
   };
 
   useEffect(() => {
@@ -33,17 +33,11 @@ const MyModal = ({
   }, [showModal, navigate]);
 
   const getCategoryName = () => {
-    console.log(selectedImage);
-    if (!selectedImage) return "Gallery";
+    const bgColor = getComputedStyle(document.documentElement)
+      .getPropertyValue("--bg-color")
+      .trim();
 
-    const normalizedImage = selectedImage.toLowerCase();
-    for (const key in categoryMapping) {
-      if (normalizedImage.includes(key.toLowerCase())) {
-        return categoryMapping[key];
-      }
-    }
-
-    return "Gallery";
+    return colorMapping[bgColor] || "Gallery";
   };
 
   useEffect(() => {
@@ -125,7 +119,7 @@ const MyModal = ({
               ></i>
             </Col>
             <Col className="text-center fs-4 fw-bold">
-              {getCategoryName()} {imageUrls.indexOf(selectedImage) + 1}
+              {getCategoryName()} n° {imageUrls.indexOf(selectedImage) + 1}
             </Col>
             <Col className="text-end fs-4">Elio Santarella</Col>
           </Row>
