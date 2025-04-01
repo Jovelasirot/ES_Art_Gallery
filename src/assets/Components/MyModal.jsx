@@ -33,6 +33,7 @@ const MyModal = ({
   }, [showModal, navigate]);
 
   const getCategoryName = () => {
+    console.log(selectedImage);
     if (!selectedImage) return "Gallery";
 
     const normalizedImage = selectedImage.toLowerCase();
