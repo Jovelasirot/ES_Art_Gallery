@@ -37,7 +37,7 @@ const MyFooter = () => {
             </Col>
             <Col className="text-start">
               <a
-                href="https://www.instagram.com/eliosantarella/"
+                href="https://www.instagram.com/elio.santarella/"
                 className="text-white "
                 target="_blank"
                 rel="noopener noreferrer"
